@@ -24,9 +24,9 @@ else
 fi
 
 SYS=$(uname -s)
-if [ "${SYS}"=="Linux" ];then
+if [[ "${SYS}" == "Linux" ]];then
     CONDA="Miniconda3-latest-Linux-x86_64.sh"
-elif [ "${SYS}"=="Darwin" ];then
+elif [[ "${SYS}" == "Darwin" ]];then
     CONDA="Miniconda3-latest-MacOSX-x86_64.sh"
 else 
     echo "Unsupported configuration."
@@ -49,7 +49,7 @@ function fetchConda(){
 function condaEnvSetup(){
     echo "### condaEnvSetup() ###"
     chmod +x ${DL_DIR}/downloads/${CONDA}
-    ${DL_DIR}/downloads//${CONDA} -b -p ${INSTALL_DIR}/install/duqt_conda;
+    ${DL_DIR}/downloads/${CONDA} -b -p ${INSTALL_DIR}/install/duqt_conda;
     source ${INSTALL_DIR}/install/duqt_conda/etc/profile.d/conda.sh ;
     conda update -n base conda -y;
     conda create -n duqt -y python;
@@ -66,12 +66,13 @@ function fetchSDKs(){
     declare -a PIP_PACKAGES
     declare -a CONDA_PACKAGES
     PIP_PACKAGES=("beautifulsoup4" "qiskit" "pyquil" "projectq" "strawberryfields" "qutip" "qinfer")
-    CONDA_PACKAGES=("tensorflow=1.6" "cython" "pybind11::conda-forge" "jupyter")
+    #If there are :: in the package name, read before delimiter as package and after as channel
+    CONDA_PACKAGES=("tensorflow=1.6::conda-forge" "cython" "pybind11::conda-forge" "jupyter")
 
     #Loop through arrays and install the packages
     for s in $(seq 0 $(( ${#CONDA_PACKAGES[@]} -1 )) ); do
-        echo ${CONDA_PACKAGES[${s}]}
-        #If there are :: in the package name, read before delimiter as package and after as channel
+        echo "Installing ${CONDA_PACKAGES[${s}]}"
+
         if [[ "${CONDA_PACKAGES[${s}]}" =~ "::" ]]; then
             PC=${CONDA_PACKAGES[${s}]} #Package::channel
             #Split string and install package in specified channel
@@ -90,6 +91,18 @@ function fetchSDKs(){
 #                 main
 ##########################################
 #Redirect logs to output and error files
-fetchConda > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2)
-condaEnvSetup > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2)
-fetchSDKs > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2)
+fetchConda > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) &&
+condaEnvSetup > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) &&
+fetchSDKs > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) 
+
+if [ $? -ne 0 ]; then
+    echo "Installation failed. Please check logs for further information."
+fi
+
+cat > ${INSTALL_DIR}/load_env.sh << EOL
+#!/bin/bash
+
+source ${INSTALL_DIR}/install/duqt_conda/etc/profile.d/conda.sh;
+conda activate duqt
+
+EOL
