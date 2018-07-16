@@ -65,7 +65,7 @@ function fetchSDKs(){
     # Declare the SDK names and packages array
     declare -a PIP_PACKAGES
     declare -a CONDA_PACKAGES
-    PIP_PACKAGES=("beautifulsoup4" "qiskit" "pyquil" "projectq" "strawberryfields" "qutip" "qinfer")
+    PIP_PACKAGES=("beautifulsoup4" "qiskit" "pyquil" "projectq" "strawberryfields" "qutip" "qinfer" "dwave-ocean-sdk" "dwave-qbsolve")
     #If there are :: in the package name, read before delimiter as package and after as channel
     CONDA_PACKAGES=("tensorflow=1.6::conda-forge" "cython" "pybind11::conda-forge" "jupyter")
 
