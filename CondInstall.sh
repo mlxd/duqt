@@ -25,7 +25,7 @@ else
     fi
 fi
 
-SYS=$(uname -s)
+export SYS=$(uname -s)
 if [[ "${SYS}" == "Linux" ]];then
     CONDA="Miniconda3-latest-Linux-x86_64.sh"
     TAR_FILES+=("https://dotnetcli.blob.core.windows.net/dotnet/Sdk/release/2.2.1xx/dotnet-sdk-latest-linux-x64.tar.gz")
@@ -84,8 +84,19 @@ installTAR(){
 setupQSharp(){
     VSCEXT=("ms-vscode.cpptools" "ms-vscode.csharp" "quantum.quantum-devkit-vscode" "ms-python.python")
     ${INSTALL_DIR}/install/dotnet new -i "Microsoft.Quantum.ProjectTemplates::0.2.1806.3001-preview"
+    BINDIR=""
+
+    if [[ "${SYS}" == "Linux" ]];then
+        BINDIR=${INSTALL_DIR}/install/vscode/bin
+    elif [[ "${SYS}" == "Darwin" ]];then
+        BINDIR=${INSTALL_DIR}/install/vscode/Contents/Resources/app/bin
+    else
+        echo "Unsupported configuration."
+        exit
+    fi
+
     for s in $(seq 0 $(( ${#VSCEXT[@]} -1 )) ); do
-        ${INSTALL_DIR}/install/vscode/bin/code --install-extension ${VSCEXT[${s}]}
+        ${BINDIR}/code --install-extension ${VSCEXT[${s}]}
     done
 
     if [[ ! -d "${INSTALL_DIR}/gitrepos" ]];then
@@ -118,7 +129,7 @@ function fetchSDKs(){
     # Declare the SDK names and packages array
     declare -a PIP_PACKAGES
     declare -a CONDA_PACKAGES
-    PIP_PACKAGES=("beautifulsoup4" "qiskit" "pyquil" "projectq" "strawberryfields" "qutip" "qinfer" "dwave-ocean-sdk" "dwave-sdk")
+    PIP_PACKAGES=("beautifulsoup4" "qiskit" "pyquil" "projectq" "strawberryfields" "qutip" "qinfer" "dwave-ocean-sdk" "dwave-sdk" "cirq" "openfermion" "openfermioncirq")
     #If there are :: in the package name, read before delimiter as package and after as channel
     CONDA_PACKAGES=("tensorflow=1.6::conda-forge" "cython" "pybind11::conda-forge" "jupyter" "nodejs::conda-forge" "pylint")
 
