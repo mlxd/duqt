@@ -1,0 +1,46 @@
+% DUQT TALES, WOO OOH!
+% Author: Lee J. O'Riordan
+\documentclass[crop,tikz]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{amssymb}
+
+\begin{document}
+\begin{tikzpicture}[y=-1cm, scale=3]
+\begin{scope}[yscale=1,xscale=-1]
+
+	\fill[fill=gray!90!white] (0.01,0) arc (270:90:0.25 and 0.5);
+	\fill [fill=gray!90!white] (0.,0.) rectangle (0.4,1.);
+
+	\draw[semithick] (0.,0) -- (0.4,0);%
+	\draw[semithick] (0.,0) -- (0.4,0);%
+	\draw[semithick] (0.,1) -- (0.4,1);% 
+
+	\draw[semithick] (0.01,0) arc (270:90:0.25 and 0.5);% left half of the left ellipse
+
+
+	\draw[fill=gray!80!white, opacity=0.2] (0.4,0.5) ellipse (0.33 and 0.5);%
+	\draw[fill=gray!60!white] (0.4,0.5) ellipse (0.33 and 0.5);%
+
+	\foreach \i in {10,...,50}
+{
+        \draw[line width=0.02mm,gray!70!black] (0.4,0.5) ellipse (\i*0.66*0.01 and \i*0.01);
+}
+
+	\draw[semithick] (0.4,0.5) ellipse (0.33 and 0.5);%
+
+	\draw[semithick,fill=gray!30!black] (0.4,0.5) ellipse (0.165 and 0.25);% right ellipse
+
+    \fill[gray!90!white,fill] (-0.45, 1.0) to [out=0,in=270] (-0.239, 0.5)
+    to [out=0,in=0] (0.07, 0.5)
+    to [out=270,in=0] (-0.15, 1.0)
+    to [out=180,in=180] cycle;
+
+	\draw[semithick] (-0.45, 1.0) to [out=0,in=270] (-0.239, 0.5);
+	\draw[semithick]  (0.07, 0.50) to [out=270,in=0] (-0.15, 1.0);
+	\draw[semithick]  (-0.15, 1.0) to [out=180,in=180] (-0.45, 1.0);
+
+	\end{scope}
+
+\end{tikzpicture}
+\end{document}
