@@ -1,12 +1,5 @@
----
-#
-# By default, content added below the "---" mark will appear in the home page
-# between the top bar and the list of recent posts.
-# To change the home page layout, edit the _layouts/home.html file.
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-#
-layout: home
----
+![The awful logo!](https://mlxd.github.io/duqt/tikz/logo.png "DUQT-tales, woo-ooh!")
+
 The [duqt](https://github.com/mlxd/duqt) repo exists solely to install all quantum SDKs that
 I can find (or at least have a public API, packages and/or hardware). 
 While the majority of these are Python-based packages, some
