@@ -3,7 +3,12 @@
   <div class="wrapper">
     {%- assign default_paths = site.pages | map: "path" -%}
     {%- assign page_paths = site.header_pages | default: default_paths -%}
-    <a class="site-title" rel="author" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+
+    <a href="http://github.com/mlxd/duqt" class="site-title" rel="author" href="{{ "/" | relative_url }}">
+        <figure>
+            <img src="tikz/logo.png" vspace="2" hspace="4" style="max-width: 240px;" alt="DUQT logo" />
+        </figure>
+    </a>
 
     {%- if page_paths -%}
       <nav class="site-nav">

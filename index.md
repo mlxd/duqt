@@ -22,4 +22,4 @@ source load_env.sh
 jupyter notebook #or 'code' for Q# programming in VS Code
 ```
 
-Things may break, but my hope is that this simplifies getting started with these many frameworks. Feel free to send suggestions, open PRs or just use the script to your own needs. Ideally, I aim for this project to develop an intermediate format to allow translation between each framework. Given a mapping between each new framework and the IL there is no need to require ports between each each newly added language/framework/hardware/etc. This is all time and funding dependent, and may require much more work than I can give.
+Things may break, but my hope is that this simplifies getting started with these many frameworks. Feel free to send suggestions, open PRs or just use the script to your own needs. Ideally, I aim for this project to develop an intermediate language (IL) to allow translation between each framework. Given a mapping between each new framework and the IL there is no need to require ports between each each newly added language/framework/hardware/etc. This is all time and funding dependent, and may require much more work than I can give.
