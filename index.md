@@ -17,7 +17,7 @@ The name is derived from duct-tape, with a Q to represent how I am attempting to
 Copy the following code into your terminal and give your machine about 10-15 minutes to do its thing: 
 ```bash
 git clone https://github.com/mlxd/duqt && cd duqt
-chmod +x ./CondInstall.sh
+chmod +x ./CondInstall.sh && ./CondInstall.sh
 source load_env.sh
 jupyter notebook #or 'code' for Q# programming in VS Code
 ```
