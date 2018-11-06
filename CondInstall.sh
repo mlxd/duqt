@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# This file will install the necessary files for running the various quantum SDK backends. Pass download directory and install directory as arguments 1 and 2 respectively. Please specify full paths using $PWD if necessary
+# This script will install the necessary files for running the various quantum SDKs.
+# Pass download directory and install directory as arguments 1 and 2 respectively.
+# Please specify full paths using $PWD. Install directory will be not relocatable.
 
 DL_DIR=$1
 INSTALL_DIR=$2
@@ -34,7 +36,7 @@ elif [[ "${SYS}" == "Darwin" ]];then
     CONDA="Miniconda3-latest-MacOSX-x86_64.sh"
     TAR_FILES+=("https://dotnetcli.blob.core.windows.net/dotnet/Sdk/release/2.2.1xx/dotnet-sdk-latest-osx-x64.tar.gz")
     TAR_FILES+=("https://go.microsoft.com/fwlink/?LinkID=620882::vscode.tar.gz")
-else 
+else
     echo "Unsupported configuration."
     exit
 fi
@@ -59,19 +61,23 @@ installTAR(){
         echo "Acquiring TAR files from ${TAR_FILES[${s}]}"
         if [[ "${TAR_FILES[${s}]}" =~ "::" ]]; then
             PC=${TAR_FILES[${s}]} #Package::channel
+
             #Split string and download package with specified name after ::
             URL="${PC%::*}"
             FILENAME="${PC#*::}"
             echo ${DL_DIR}/downloads/${PC#*::}
-            if [ ! -f "${DL_DIR}/downloads/${FILENAME}" ]; then 
+            if [ ! -f "${DL_DIR}/downloads/${FILENAME}" ]; then
                 curl -o ${DL_DIR}/downloads/${FILENAME} -J -L "${URL}"
             fi
+
             mkdir ${INSTALL_DIR}/install/${FILENAME%%.*}
-            tar xvf ${DL_DIR}/downloads/${FILENAME} -C ${INSTALL_DIR}/install/${FILENAME%%.*} --strip-components 1
+            tar xvf ${DL_DIR}/downloads/${FILENAME} -C \
+                ${INSTALL_DIR}/install/${FILENAME%%.*} \
+                --strip-components 1
         else
             FILENAME=$(basename ${TAR_FILES[${s}]})
             pushd . > /dev/null && cd ${DL_DIR}/downloads/
-            if [ ! -f ${FILENAME} ]; then 
+            if [ ! -f ${FILENAME} ]; then
                 curl -O -J -L ${TAR_FILES[${s}]}
             fi
             tar xvf ${FILENAME} -C ${INSTALL_DIR}/install/
@@ -83,7 +89,7 @@ installTAR(){
 #Setup VSCode extensions for Q# and setup samples environment. Failures almost certainly guaranteed.
 setupQSharp(){
     VSCEXT=("ms-vscode.cpptools" "ms-vscode.csharp" "quantum.quantum-devkit-vscode" "ms-python.python")
-    ${INSTALL_DIR}/install/dotnet new -i "Microsoft.Quantum.ProjectTemplates::0.2.1806.3001-preview"
+    ${INSTALL_DIR}/install/dotnet new -i "Microsoft.Quantum.ProjectTemplates::0.3.1810.2508-preview"
     BINDIR=""
 
     if [[ "${SYS}" == "Linux" ]];then
@@ -104,7 +110,7 @@ setupQSharp(){
 	mkdir -p ${INSTALL_DIR}/gitrepos && cd ${INSTALL_DIR}/gitrepos
         git clone https://github.com/Microsoft/Quantum.git Microsoft_Quantum
 	cd Microsoft_Quantum
-	$INSTALL_DIR/install/dotnet restore
+	#$INSTALL_DIR/install/dotnet restore
 	popd > /dev/null
     fi
 }
@@ -158,7 +164,7 @@ function fetchSDKs(){
 installTAR > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) &&
 fetchConda > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) &&
 condaEnvSetup > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) &&
-fetchSDKs > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) && 
+fetchSDKs > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2) &&
 setupQSharp > >(tee -a CondInstall_out.log) 2> >(tee -a CondInstall_err.log >&2)
 
 if [ $? -ne 0 ]; then
