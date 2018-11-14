@@ -1,9 +1,14 @@
-\documentclass[crop]{standalone}
+\documentclass[crop,border=1pt]{standalone}
 \usepackage{graphicx}
 
 \usepackage{auncial}
 \usepackage[B1]{fontenc}
 
 \begin{document}
-    \aunclfamily\itshape DU\includegraphics[height=\fontcharht\font`\B, trim={0 0 0.3cm 0}]{logo.pdf}T
+\aunclfamily\itshape 
+\begin{tabular}{ l l l l }
+	%{D\hspace{-10pt}} & {U} & {Q} & {T} 
+	{D\hspace*{-11pt}} & {U\hspace*{-11pt}} & {\includegraphics[height=1.1\fontcharht\font`\B, trim={6pt 12pt 6pt 0pt}]{logo.pdf}\hspace*{-11pt}} & {T} 
+\end{tabular}
+%    \aunclfamily\itshape \begin{minipage}{16pt}{DU}\end{minipage}\vspace*{3cm}\begin{minipage}{16pt}\includegraphics[height=2\fontcharht\font`\B, trim={0pt 0 0pt 0pt}]{logo.pdf}\end{minipage}\vspace*{-3cm}\begin{minipage}{16pt}T\end{minipage}
 \end{document}
